@@ -4,27 +4,24 @@ pipeline {
     stages {
         stage('Checkout') {
             steps {
-                // Checkout the code from the Git repository
-                script {
-                    def scmVars = 'https://github.com/draja27/deepak.git'
-                    // Optionally, you can print out some Git information
-                    echo "Checked out Git branch: ${scmVars.GIT_BRANCH}"
-                    echo "Git commit: ${scmVars.GIT_COMMIT}"
-                }
+                // Checkout code from Git
+                git credentialsId: 'your-git-credentials', url: 'https://github.com/draja27/deepak.git'
             }
         }
 
         stage('Build') {
             steps {
-                // Replace this with your build steps (e.g., compiling, packaging)
-                sh 'echo "Building the project"'
+                // Build your project (e.g., compile code, package JAR)
+                sh 'mvn clean package' // Adjust this command based on your build tool
             }
         }
 
-        stage('Test') {
+        stage('Deploy to Tomcat') {
             steps {
-                // Replace this with your testing commands
-                sh 'echo "Running tests"'
+                // Copy the JAR file to the Tomcat server
+                sh 'scp target/test.jar root@92.168.111.130:/tomcat/'
+
+                
             }
         }
     }
