@@ -4,25 +4,12 @@ pipeline {
     stages {
         stage('Checkout') {
             steps {
-                // Checkout code from Git
-                git credentialsId: 'your-git-credentials', url: 'https://github.com/draja27/deepak.git'
+                dir('/var/lib/jenkins/workspace/pipe') {
+                    // Run Git commands here
+                    sh 'git fetch --tags --progress https://github.com/draja27/deepak.git +refs/heads/*:refs/remotes/origin/*'
+                }
             }
         }
-
-        stage('Build') {
-            steps {
-                // Build your project (e.g., compile code, package JAR)
-                sh 'mvn clean package' // Adjust this command based on your build tool
-            }
-        }
-
-        stage('Deploy to Tomcat') {
-            steps {
-                // Copy the JAR file to the Tomcat server
-                sh 'scp target/test.jar root@92.168.111.130:/tomcat/'
-
-                
-            }
-        }
+        // Add more stages as needed
     }
 }
